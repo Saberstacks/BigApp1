@@ -6,10 +6,10 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { keyword, language_code, location_name } = req.body;
+  const { keyword } = req.body;
 
-  if (!keyword || !language_code || !location_name) {
-    res.status(400).json({ error: 'keyword, language_code, and location_name are required' });
+  if (!keyword) {
+    res.status(400).json({ error: 'Keyword is required' });
     return;
   }
 
@@ -17,13 +17,13 @@ module.exports = async (req, res) => {
   const taskPayload = [
     {
       keyword: keyword,
-      language_code: language_code,
-      location_name: location_name,
+      language_code: 'en',
+      location_name: 'New York,New York,United States',
     },
   ];
 
   try {
-    // Create the task
+    // Create the task using the 'business_info' endpoint
     const createResponse = await axios({
       method: 'post',
       url: 'https://sandbox.dataforseo.com/v3/business_data/google/my_business_info/task_post',
@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
     // Wait for a moment before fetching the results
     await new Promise((resolve) => setTimeout(resolve, 2000)); // wait 2 seconds
 
-    // Retrieve the results
+    // Retrieve the results using the 'business_info' endpoint
     const resultsResponse = await axios({
       method: 'get',
       url: `https://sandbox.dataforseo.com/v3/business_data/google/my_business_info/task_get/advanced/${taskID}`,
