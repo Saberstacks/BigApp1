@@ -172,7 +172,14 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       body: JSON.stringify(payload),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((err) => {
+            throw new Error(err.error || 'An error occurred');
+          });
+        }
+        return response.json();
+      })
       .then((data) => {
         if (data.error) {
           resultDiv.innerHTML = `<div class="error">Error: ${data.error}</div>`;
@@ -182,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch((error) => {
         console.error('Error:', error);
-        resultDiv.innerHTML = '<div class="error">An error occurred. Please try again.</div>';
+        resultDiv.innerHTML = `<div class="error">An error occurred: ${error.message}</div>`;
       });
   });
 
