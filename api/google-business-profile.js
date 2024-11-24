@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   ];
 
   try {
-    // Create the task using the 'business_info' endpoint
+    // Create the task using the 'my_business_info' endpoint
     const createResponse = await axios({
       method: 'post',
       url: 'https://sandbox.dataforseo.com/v3/business_data/google/my_business_info/task_post',
@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
     // Wait for a moment before fetching the results
     await new Promise((resolve) => setTimeout(resolve, 2000)); // wait 2 seconds
 
-    // Retrieve the results using the 'business_info' endpoint
+    // Retrieve the results using the 'my_business_info' endpoint
     const resultsResponse = await axios({
       method: 'get',
       url: `https://sandbox.dataforseo.com/v3/business_data/google/my_business_info/task_get/advanced/${taskID}`,
