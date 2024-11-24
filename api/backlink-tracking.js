@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
 
   try {
     const response = await axios.post(
-      'https://sandbox.api.dataforseo.com/v3/backlinks/links/page_one/task_post',
+      'https://sandbox.dataforseo.com/v3/backlinks/links/page_one/task_post',
       payload,
       {
         headers: {
