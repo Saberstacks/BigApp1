@@ -35,7 +35,7 @@ module.exports = async (req, res) => {
       },
     });
 
-    const resultData = response.data.result;
+    const resultData = response.data;
 
     res.status(200).json(resultData);
   } catch (error) {
