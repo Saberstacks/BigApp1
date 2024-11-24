@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const features = {
     'google-business-profile': {
-      placeholder: 'Enter Business Name',
-      example: 'RustyBrick, Inc.',
-      description: 'Google Business Profile Audit requires the business name and location.',
+      placeholder: 'Enter Hotel Name',
+      example: 'Hilton Garden Inn',
+      description: 'Google Business Profile Audit requires the hotel name and location.',
       validate: (input) => {
         const locationInput = document.getElementById('location');
         return input.trim().length > 0 && locationInput && locationInput.value.trim().length > 0;
@@ -20,75 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
       preparePayload: (input) => {
         const locationInput = document.getElementById('location');
         return {
-          business_name: input.trim(),
+          hotel_name: input.trim(),
           location: locationInput.value.trim(),
         };
       },
-      prefill: 'RustyBrick, Inc.',
+      prefill: 'Hilton Garden Inn',
       additionalFields: [
         {
           id: 'location',
-          placeholder: 'Enter Business Location',
+          placeholder: 'Enter Hotel Location',
           value: 'New York, NY',
         },
       ],
     },
-    'on-page-seo': {
-      placeholder: 'Enter Website URL',
-      example: 'https://www.example.com',
-      description: 'On-Page SEO Analysis requires the website URL.',
-      validate: (input) => isValidURL(input),
-      preparePayload: (input) => ({ site: input.trim() }),
-      prefill: 'https://www.example.com',
-    },
-    'backlink-tracking': {
-      placeholder: 'Enter Website URL',
-      example: 'https://www.example.com',
-      description: 'Backlink Tracking requires the website URL.',
-      validate: (input) => isValidURL(input),
-      preparePayload: (input) => ({ site: input.trim() }),
-      prefill: 'https://www.example.com',
-    },
-    'keyword-research': {
-      placeholder: 'Enter Keywords (comma-separated)',
-      example: 'seo tools, keyword research',
-      description: 'Keyword Research requires keywords, location code, and language name.',
-      validate: (input) => {
-        const locationCodeInput = document.getElementById('location-code');
-        const languageNameInput = document.getElementById('language-name');
-        const keywords = input.split(',').map((k) => k.trim()).filter((k) => k);
-        return (
-          keywords.length > 0 &&
-          locationCodeInput &&
-          locationCodeInput.value.trim() &&
-          languageNameInput &&
-          languageNameInput.value.trim()
-        );
-      },
-      preparePayload: (input) => {
-        const locationCodeInput = document.getElementById('location-code');
-        const languageNameInput = document.getElementById('language-name');
-        const keywords = input.split(',').map((k) => k.trim()).filter((k) => k);
-        return {
-          keywords: keywords,
-          location_code: parseInt(locationCodeInput.value.trim()),
-          language_name: languageNameInput.value.trim(),
-        };
-      },
-      prefill: 'seo tools, keyword research',
-      additionalFields: [
-        {
-          id: 'location-code',
-          placeholder: 'Enter Location Code (e.g., 2840 for USA)',
-          value: '2840',
-        },
-        {
-          id: 'language-name',
-          placeholder: 'Enter Language Name (e.g., English)',
-          value: 'English',
-        },
-      ],
-    },
+    // Add other features here as needed
   };
 
   featureList.addEventListener('click', (e) => {
