@@ -12,17 +12,22 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // Correct field names and values
+  // Remove protocol and www from site
+  const formattedSite = site.replace(/(^\w+:|^)\/\//, '').replace(/^www\./, '');
+
+  // Set up the task parameters
   const task = {
-    target: site,
-    max_crawl_pages: 10 // You can adjust this value as needed
+    target: formattedSite,
+    max_crawl_pages: 1, // Limit to 1 page to reduce data volume
+    force_sitewide_checks: true // Enable sitewide checks for a single page
   };
 
   // Payload is an array of tasks
   const payload = [task];
 
   try {
-    const response = await axios({
+    // Create the task
+    const createResponse = await axios({
       method: 'post',
       url: 'https://sandbox.dataforseo.com/v3/on_page/task_post',
       auth: {
@@ -35,7 +40,68 @@ module.exports = async (req, res) => {
       }
     });
 
-    res.status(200).json(response.data);
+    const taskID = createResponse.data.tasks[0].id;
+
+    // Now poll the task status until it's finished
+    let taskCompleted = false;
+    let attempt = 0;
+    const maxAttempts = 5;
+    const delay = 2000; // 2 seconds
+
+    let taskResult;
+
+    while (!taskCompleted && attempt < maxAttempts) {
+      attempt++;
+      // Wait for a short period before checking
+      await new Promise(resolve => setTimeout(resolve, delay));
+
+      // Check the task status
+      const statusResponse = await axios({
+        method: 'post',
+        url: 'https://sandbox.dataforseo.com/v3/on_page/summary',
+        auth: {
+          username: process.env.DATAFORSEO_LOGIN,
+          password: process.env.DATAFORSEO_PASSWORD
+        },
+        data: [{ id: taskID }],
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      taskResult = statusResponse.data.tasks[0].result[0];
+      const crawlProgress = taskResult.crawl_progress;
+
+      if (crawlProgress === 'finished') {
+        taskCompleted = true;
+        // Extract the desired data
+        const pagesCount = taskResult.pages_count;
+        const items = taskResult.items;
+        if (items && items.length > 0) {
+          const pageData = items[0];
+          const metaData = pageData.meta;
+          const title = metaData.title;
+          const htags = metaData.htags;
+          const description = metaData.description;
+
+          // Return only the desired data
+          res.status(200).json({
+            title,
+            description,
+            htags
+          });
+        } else {
+          res.status(200).json({ message: 'No page data found.' });
+        }
+        return;
+      }
+      // else continue polling
+    }
+
+    if (!taskCompleted) {
+      res.status(202).json({ message: 'Task is still in progress. Please try again later.', task_id: taskID });
+    }
+
   } catch (error) {
     const errorData = error.response ? error.response.data : { status_message: error.message };
     console.error('Error in On-Page SEO Analysis:', errorData);
