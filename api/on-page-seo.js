@@ -17,9 +17,8 @@ module.exports = async (req, res) => {
     limit: 100
   };
 
-  const payload = {
-    data: [task]
-  };
+  // Send payload as an array of tasks directly
+  const payload = [task];
 
   try {
     const response = await axios.post(
