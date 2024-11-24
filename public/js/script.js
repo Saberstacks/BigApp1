@@ -41,13 +41,21 @@ document.addEventListener('DOMContentLoaded', () => {
       preparePayload: (input) => ({ site: input.trim() }),
       prefill: 'https://www.example.com',
     },
-    'competitor-analysis': {
-      placeholder: 'Enter Keyword',
-      example: 'best smartphones 2023',
-      description: 'Competitor Analysis requires a keyword, location, and language.',
+    'backlink-tracking': {
+      placeholder: 'Enter Domain',
+      example: 'example.com',
+      description: 'Backlink Tracking requires the domain name.',
+      validate: (input) => input.trim().length > 0,
+      preparePayload: (input) => ({ domain: input.trim() }),
+      prefill: 'example.com',
+    },
+    'keyword-research': {
+      placeholder: 'Enter Keywords (comma-separated)',
+      example: 'keyword research, SEO tools',
+      description: 'Keyword Research requires keywords, location code, and language code.',
       validate: (input) => {
-        const locationInput = document.getElementById('location');
-        const languageInput = document.getElementById('language');
+        const locationInput = document.getElementById('location_code');
+        const languageInput = document.getElementById('language_code');
         return (
           input.trim().length > 0 &&
           locationInput &&
@@ -57,29 +65,29 @@ document.addEventListener('DOMContentLoaded', () => {
         );
       },
       preparePayload: (input) => {
-        const locationInput = document.getElementById('location');
-        const languageInput = document.getElementById('language');
+        const locationInput = document.getElementById('location_code');
+        const languageInput = document.getElementById('language_code');
+        const keywordsArray = input.split(',').map((kw) => kw.trim());
         return {
-          keyword: input.trim(),
-          location_name: locationInput.value.trim(),
-          language_name: languageInput.value.trim(),
+          keywords: keywordsArray,
+          location_code: parseInt(locationInput.value.trim()),
+          language_code: languageInput.value.trim(),
         };
       },
-      prefill: 'best smartphones 2023',
+      prefill: 'keyword research, SEO tools',
       additionalFields: [
         {
-          id: 'location',
-          placeholder: 'Enter Location (e.g., New York, United States)',
-          value: 'New York, United States',
+          id: 'location_code',
+          placeholder: 'Enter Location Code (e.g., 2840 for United States)',
+          value: '2840',
         },
         {
-          id: 'language',
-          placeholder: 'Enter Language (e.g., English)',
-          value: 'English',
+          id: 'language_code',
+          placeholder: 'Enter Language Code (e.g., en for English)',
+          value: 'en',
         },
       ],
     },
-    // Add other features here as needed
   };
 
   featureList.addEventListener('click', (e) => {
