@@ -12,27 +12,29 @@ module.exports = async (req, res) => {
     return;
   }
 
+  // Correct field names and values
   const task = {
-    site: site,
-    limit: 100
+    target: site,
+    max_crawl_pages: 10 // You can adjust this value as needed
   };
 
-  // Adjust payload to match the expected structure
-  const payload = {
-    tasks: [task]
-  };
+  // Payload is an array of tasks
+  const payload = [task];
 
   try {
-    const response = await axios.post(
-      'https://sandbox.dataforseo.com/v3/on_page/task_post',
-      payload,
-      {
-        headers: {
-          'Authorization': `Basic ${Buffer.from(`${process.env.DATAFORSEO_LOGIN}:${process.env.DATAFORSEO_PASSWORD}`).toString('base64')}`,
-          'Content-Type': 'application/json'
-        }
+    const response = await axios({
+      method: 'post',
+      url: 'https://sandbox.dataforseo.com/v3/on_page/task_post',
+      auth: {
+        username: process.env.DATAFORSEO_LOGIN,
+        password: process.env.DATAFORSEO_PASSWORD
+      },
+      data: payload,
+      headers: {
+        'Content-Type': 'application/json'
       }
-    );
+    });
+
     res.status(200).json(response.data);
   } catch (error) {
     const errorData = error.response ? error.response.data : { status_message: error.message };
