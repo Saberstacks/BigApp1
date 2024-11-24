@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const categoryInput = document.getElementById('category');
         const locationInput = document.getElementById('location');
         const payload = { businessName: input.trim() };
-        if (categoryInput.value.trim()) payload.category = categoryInput.value.trim();
-        if (locationInput.value.trim()) payload.location = locationInput.value.trim();
+        if (categoryInput && categoryInput.value.trim()) payload.category = categoryInput.value.trim();
+        if (locationInput && locationInput.value.trim()) payload.location = locationInput.value.trim();
         return payload;
       },
       prefill: 'Starbucks'
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const locationCodeInput = document.getElementById('location-code');
         const languageNameInput = document.getElementById('language-name');
         const keywords = input.split(',').map(k => k.trim()).filter(k => k);
-        return keywords.length > 0 && locationCodeInput.value.trim() && languageNameInput.value.trim();
+        return keywords.length > 0 && locationCodeInput && locationCodeInput.value.trim() && languageNameInput && languageNameInput.value.trim();
       },
       preparePayload: (input) => {
         const locationCodeInput = document.getElementById('location-code');
