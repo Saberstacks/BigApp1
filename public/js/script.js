@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const features = {
     'google-business-profile': {
       placeholder: 'Enter Business Name',
-      example: 'e.g., Starbucks',
+      example: 'Starbucks',
       description: 'Google Business Profile Audit requires the business name.',
       validate: (input) => input.trim().length > 0,
       preparePayload: (input) => {
@@ -21,25 +21,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (categoryInput.value.trim()) payload.category = categoryInput.value.trim();
         if (locationInput.value.trim()) payload.location = locationInput.value.trim();
         return payload;
-      }
+      },
+      prefill: 'Starbucks'
     },
     'on-page-seo': {
       placeholder: 'Enter Website URL',
-      example: 'e.g., https://www.example.com',
+      example: 'https://www.example.com',
       description: 'On-Page SEO Analysis requires the website URL.',
       validate: (input) => isValidURL(input),
-      preparePayload: (input) => ({ site: input.trim() })
+      preparePayload: (input) => ({ site: input.trim() }),
+      prefill: 'https://www.example.com'
     },
     'backlink-tracking': {
       placeholder: 'Enter Website URL',
-      example: 'e.g., https://www.example.com',
+      example: 'https://www.example.com',
       description: 'Backlink Tracking requires the website URL.',
       validate: (input) => isValidURL(input),
-      preparePayload: (input) => ({ site: input.trim() })
+      preparePayload: (input) => ({ site: input.trim() }),
+      prefill: 'https://www.example.com'
     },
     'keyword-research': {
       placeholder: 'Enter Keywords (comma-separated)',
-      example: 'e.g., keyword1, keyword2',
+      example: 'seo tools, keyword research',
       description: 'Keyword Research requires keywords, location code, and language name.',
       validate: (input) => {
         const locationCodeInput = document.getElementById('location-code');
@@ -56,6 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
           location_code: parseInt(locationCodeInput.value.trim()),
           language_name: languageNameInput.value.trim()
         };
+      },
+      prefill: 'seo tools, keyword research',
+      additionalPrefill: {
+        locationCode: '2840',
+        languageName: 'English'
       }
     }
   };
@@ -78,9 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
       selectedItem.classList.add('active-feature');
 
       inputField.placeholder = features[feature].placeholder;
-      featureDescription.innerHTML = `${features[feature].description} <span class="example">${features[feature].example}</span>`;
-      inputField.value = '';
-      submitButton.disabled = true;
+      featureDescription.innerHTML = `${features[feature].description} <span class="example">e.g., ${features[feature].example}</span>`;
+      inputField.value = features[feature].prefill || '';
+      submitButton.disabled = !features[feature].validate(inputField.value);
       resultDiv.textContent = '';
       additionalFieldsDiv.innerHTML = '';
 
@@ -90,11 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
         locationCodeInput.type = 'text';
         locationCodeInput.id = 'location-code';
         locationCodeInput.placeholder = 'Enter Location Code (e.g., 2840 for USA)';
+        locationCodeInput.value = features[feature].additionalPrefill.locationCode || '';
 
         const languageNameInput = document.createElement('input');
         languageNameInput.type = 'text';
         languageNameInput.id = 'language-name';
         languageNameInput.placeholder = 'Enter Language Name (e.g., English)';
+        languageNameInput.value = features[feature].additionalPrefill.languageName || '';
 
         additionalFieldsDiv.appendChild(locationCodeInput);
         additionalFieldsDiv.appendChild(languageNameInput);
@@ -157,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const payload = features[selectedFeature].preparePayload(userInput);
 
-    fetch(`/seo/${selectedFeature}`, {
+    fetch(`/api/${selectedFeature}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -180,11 +190,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function isValidURL(string) {
     const urlPattern = new RegExp(
-      '^(https?:\\/\\/)?' + // protocol
+      '^(https?:\\/\\/)' + // protocol
       '([\\w\\d-]+\\.)+[\\w]{2,}' + // domain name and extension
       '(\\/.*)?$', // port and path
       'i'
     );
     return !!urlPattern.test(string);
+  }
+
+  // Auto-select the first feature on page load
+  const firstFeatureItem = featureList.querySelector('li[data-feature]');
+  if (firstFeatureItem) {
+    firstFeatureItem.click();
   }
 });
