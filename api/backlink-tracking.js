@@ -12,14 +12,18 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const payload = [{
+  const task = {
     target: site,
     limit: 100
-  }];
+  };
+
+  const payload = {
+    data: [task]
+  };
 
   try {
     const response = await axios.post(
-      'https://sandbox.dataforseo.com/v3/backlinks/links/page_one/task_post',
+      'https://sandbox.dataforseo.com/v3/backlinks/links/tasks_post',
       payload,
       {
         headers: {
