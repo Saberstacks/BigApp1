@@ -2,14 +2,12 @@
   "name": "seo-tools",
   "version": "1.0.0",
   "description": "SEO tools powered by DataForSEO API",
-  "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "build": "echo 'No build step required'",
+    "start": "vercel dev"
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "body-parser": "^1.19.0",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "dotenv": "^8.2.0"
   }
 }
