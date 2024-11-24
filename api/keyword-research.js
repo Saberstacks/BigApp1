@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
 
   try {
     const response = await axios.post(
-      'https://sandbox.api.dataforseo.com/v3/keywords_data/google/search_volume/task_post',
+      'https://sandbox.dataforseo.com/v3/keywords_data/google/search_volume/task_post',
       tasks,
       {
         headers: {
