@@ -41,7 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const locationCodeInput = document.getElementById('location-code');
         const languageNameInput = document.getElementById('language-name');
         const keywords = input.split(',').map(k => k.trim()).filter(k => k);
-        return keywords.length > 0 && locationCodeInput && locationCodeInput.value.trim() && languageNameInput && languageNameInput.value.trim();
+        return (
+          keywords.length > 0 &&
+          locationCodeInput &&
+          locationCodeInput.value.trim() &&
+          languageNameInput &&
+          languageNameInput.value.trim()
+        );
       },
       preparePayload: (input) => {
         const locationCodeInput = document.getElementById('location-code');
@@ -50,15 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return {
           keywords: keywords,
           location_code: parseInt(locationCodeInput.value.trim()),
-          language_name: languageNameInput.value.trim()
+          language_name: languageNameInput.value.trim(),
         };
       },
       prefill: 'seo tools, keyword research',
       additionalPrefill: {
         locationCode: '2840',
-        languageName: 'English'
-      }
-    }
+        languageName: 'English',
+      },
+    },
   };
 
   featureList.addEventListener('click', (e) => {
@@ -146,19 +152,19 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(`/api/${selectedFeature}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data.error) {
           resultDiv.innerHTML = `<div class="error">Error: ${data.error}</div>`;
         } else {
           resultDiv.textContent = JSON.stringify(data, null, 2);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error:', error);
         resultDiv.innerHTML = '<div class="error">An error occurred. Please try again.</div>';
       });
@@ -167,8 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function isValidURL(string) {
     const urlPattern = new RegExp(
       '^(https?:\\/\\/)' + // protocol
-      '([\\w\\d-]+\\.)+[\\w]{2,}' + // domain name and extension
-      '(\\/.*)?$', // port and path
+        '([\\w\\d-]+\\.)+[\\w]{2,}' + // domain name and extension
+        '(\\/.*)?$', // port and path
       'i'
     );
     return !!urlPattern.test(string);
