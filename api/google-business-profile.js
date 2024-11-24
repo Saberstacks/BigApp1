@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
 
   try {
     const response = await axios.post(
-      'https://sandbox.api.dataforseo.com/v3/business_data/google/my_business_info/task_post',
+      'https://sandbox.dataforseo.com/v3/business_data/google/my_business_info/task_post',
       payload,
       {
         headers: {
