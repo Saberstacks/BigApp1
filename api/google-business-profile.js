@@ -6,26 +6,26 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { business_name, location } = req.body;
+  const { hotel_name, location } = req.body;
 
-  if (!business_name || !location) {
-    res.status(400).json({ error: 'business_name and location are required' });
+  if (!hotel_name || !location) {
+    res.status(400).json({ error: 'hotel_name and location are required' });
     return;
   }
 
   // Prepare the task payload
   const taskPayload = [
     {
-      business_name: business_name,
+      hotel_name: hotel_name,
       location: location,
     },
   ];
 
   try {
-    // Create the task using the 'my_business_info' endpoint
-    const createResponse = await axios({
+    // Send the POST request to the 'hotel_info' endpoint in the sandbox environment
+    const response = await axios({
       method: 'post',
-      url: 'https://sandbox.dataforseo.com/v3/business_data/google/my_business_info/task_post',
+      url: 'https://sandbox.dataforseo.com/v3/business_data/google/hotel_info/task_post',
       auth: {
         username: process.env.DATAFORSEO_LOGIN,
         password: process.env.DATAFORSEO_PASSWORD,
@@ -36,15 +36,15 @@ module.exports = async (req, res) => {
       },
     });
 
-    const taskID = createResponse.data.tasks[0].id;
+    const taskID = response.data.tasks[0].id;
 
     // Wait for a moment before fetching the results
     await new Promise((resolve) => setTimeout(resolve, 2000)); // wait 2 seconds
 
-    // Retrieve the results using the 'my_business_info' endpoint
+    // Retrieve the results using the 'hotel_info' endpoint
     const resultsResponse = await axios({
       method: 'get',
-      url: `https://sandbox.dataforseo.com/v3/business_data/google/my_business_info/task_get/advanced/${taskID}`,
+      url: `https://sandbox.dataforseo.com/v3/business_data/google/hotel_info/task_get/advanced/${taskID}`,
       auth: {
         username: process.env.DATAFORSEO_LOGIN,
         password: process.env.DATAFORSEO_PASSWORD,
