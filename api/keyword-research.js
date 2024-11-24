@@ -26,10 +26,14 @@ module.exports = async (req, res) => {
     language_name: language_name
   }));
 
+  const payload = {
+    data: tasks
+  };
+
   try {
     const response = await axios.post(
       'https://sandbox.dataforseo.com/v3/keywords_data/google/search_volume/task_post',
-      tasks,
+      payload,
       {
         headers: {
           'Authorization': `Basic ${Buffer.from(`${process.env.DATAFORSEO_LOGIN}:${process.env.DATAFORSEO_PASSWORD}`).toString('base64')}`,
