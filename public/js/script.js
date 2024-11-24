@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
       example: 'example.com',
       description: 'Backlink Tracking requires the domain name.',
       validate: (input) => input.trim().length > 0,
-      preparePayload: (input) => ({ domain: input.trim() }),
+      preparePayload: (input) => ({ target: input.trim() }),
       prefill: 'example.com',
     },
     'keyword-research': {
