@@ -9,6 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedFeature = null;
 
   const features = {
+    'on-page-seo': {
+      placeholder: 'Enter Website URL',
+      example: 'https://www.example.com',
+      description: 'On-Page SEO Analysis requires the website URL.',
+      validate: (input) => isValidURL(input),
+      preparePayload: (input) => ({ site: input.trim() }),
+      prefill: 'https://www.example.com',
+    },
     'google-business-profile': {
       placeholder: 'Enter Hotel Name',
       example: 'Hilton Garden Inn',
