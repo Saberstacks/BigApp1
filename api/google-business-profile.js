@@ -6,19 +6,18 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { keyword } = req.body;
+  const { business_name, location } = req.body;
 
-  if (!keyword) {
-    res.status(400).json({ error: 'Keyword is required' });
+  if (!business_name || !location) {
+    res.status(400).json({ error: 'business_name and location are required' });
     return;
   }
 
   // Prepare the task payload
   const taskPayload = [
     {
-      keyword: keyword,
-      language_code: 'en',
-      location_name: 'New York,New York,United States',
+      business_name: business_name,
+      location: location,
     },
   ];
 
