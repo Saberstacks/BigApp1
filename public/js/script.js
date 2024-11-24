@@ -14,15 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
       example: 'RustyBrick, Inc.',
       description: 'Google Business Profile Audit requires the business name.',
       validate: (input) => input.trim().length > 0,
-      preparePayload: (input) => {
-        const payload = {
-          keyword: input.trim(),
-          language_code: 'en',
-          location_name: 'New York,New York,United States',
-        };
-        return payload;
-      },
-      prefill: 'RustyBrick, Inc.'
+      preparePayload: (input) => ({ keyword: input.trim() }),
+      prefill: 'RustyBrick, Inc.',
     },
     'on-page-seo': {
       placeholder: 'Enter Website URL',
@@ -30,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
       description: 'On-Page SEO Analysis requires the website URL.',
       validate: (input) => isValidURL(input),
       preparePayload: (input) => ({ site: input.trim() }),
-      prefill: 'https://www.example.com'
+      prefill: 'https://www.example.com',
     },
     'backlink-tracking': {
       placeholder: 'Enter Website URL',
@@ -38,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       description: 'Backlink Tracking requires the website URL.',
       validate: (input) => isValidURL(input),
       preparePayload: (input) => ({ site: input.trim() }),
-      prefill: 'https://www.example.com'
+      prefill: 'https://www.example.com',
     },
     'keyword-research': {
       placeholder: 'Enter Keywords (comma-separated)',
