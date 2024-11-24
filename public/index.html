@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SEO Tools</title>
+  <script src="/js/script.js" defer></script>
+  <style>
+    /* Basic styling */
+    #feature-list li {
+      cursor: pointer;
+      list-style-type: none;
+      margin: 5px 0;
+    }
+    #submit-button:disabled {
+      background-color: #ccc;
+    }
+    #result {
+      white-space: pre-wrap;
+      margin-top: 20px;
+    }
+    input {
+      display: block;
+      margin: 10px 0;
+    }
+    #additional-fields input {
+      margin-top: 5px;
+    }
+    .error {
+      color: red;
+    }
+    .example {
+      color: gray;
+      font-size: 0.9em;
+    }
+    .active-feature {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>SEO Tools</h1>
+  <ul id="feature-list">
+    <li data-feature="google-business-profile">Google Business Profile Audit</li>
+    <li data-feature="on-page-seo">On-Page SEO Analysis</li>
+    <li data-feature="backlink-tracking">Backlink Tracking</li>
+    <li data-feature="keyword-research">Keyword Research</li>
+  </ul>
+  <div>
+    <p id="feature-description">Select a feature to get started.</p>
+    <input type="text" id="input-field" placeholder="" />
+    <div id="additional-fields"></div>
+    <button id="submit-button" disabled>Submit</button>
+  </div>
+  <div id="result"></div>
+</body>
+</html>
