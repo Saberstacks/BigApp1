@@ -12,10 +12,26 @@ document.addEventListener('DOMContentLoaded', () => {
     'google-business-profile': {
       placeholder: 'Enter Business Name',
       example: 'RustyBrick, Inc.',
-      description: 'Google Business Profile Audit requires the business name.',
-      validate: (input) => input.trim().length > 0,
-      preparePayload: (input) => ({ keyword: input.trim() }),
+      description: 'Google Business Profile Audit requires the business name and location.',
+      validate: (input) => {
+        const locationInput = document.getElementById('location');
+        return input.trim().length > 0 && locationInput && locationInput.value.trim().length > 0;
+      },
+      preparePayload: (input) => {
+        const locationInput = document.getElementById('location');
+        return {
+          business_name: input.trim(),
+          location: locationInput.value.trim(),
+        };
+      },
       prefill: 'RustyBrick, Inc.',
+      additionalFields: [
+        {
+          id: 'location',
+          placeholder: 'Enter Business Location',
+          value: 'New York, NY',
+        },
+      ],
     },
     'on-page-seo': {
       placeholder: 'Enter Website URL',
@@ -40,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
       validate: (input) => {
         const locationCodeInput = document.getElementById('location-code');
         const languageNameInput = document.getElementById('language-name');
-        const keywords = input.split(',').map(k => k.trim()).filter(k => k);
+        const keywords = input.split(',').map((k) => k.trim()).filter((k) => k);
         return (
           keywords.length > 0 &&
           locationCodeInput &&
@@ -52,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
       preparePayload: (input) => {
         const locationCodeInput = document.getElementById('location-code');
         const languageNameInput = document.getElementById('language-name');
-        const keywords = input.split(',').map(k => k.trim()).filter(k => k);
+        const keywords = input.split(',').map((k) => k.trim()).filter((k) => k);
         return {
           keywords: keywords,
           location_code: parseInt(locationCodeInput.value.trim()),
@@ -60,10 +76,18 @@ document.addEventListener('DOMContentLoaded', () => {
         };
       },
       prefill: 'seo tools, keyword research',
-      additionalPrefill: {
-        locationCode: '2840',
-        languageName: 'English',
-      },
+      additionalFields: [
+        {
+          id: 'location-code',
+          placeholder: 'Enter Location Code (e.g., 2840 for USA)',
+          value: '2840',
+        },
+        {
+          id: 'language-name',
+          placeholder: 'Enter Language Name (e.g., English)',
+          value: 'English',
+        },
+      ],
     },
   };
 
@@ -91,25 +115,18 @@ document.addEventListener('DOMContentLoaded', () => {
       resultDiv.textContent = '';
       additionalFieldsDiv.innerHTML = '';
 
-      if (feature === 'keyword-research') {
-        // Add location_code and language_name fields
-        const locationCodeInput = document.createElement('input');
-        locationCodeInput.type = 'text';
-        locationCodeInput.id = 'location-code';
-        locationCodeInput.placeholder = 'Enter Location Code (e.g., 2840 for USA)';
-        locationCodeInput.value = features[feature].additionalPrefill.locationCode || '';
+      // Add additional fields if any
+      if (features[feature].additionalFields) {
+        features[feature].additionalFields.forEach((field) => {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.id = field.id;
+          input.placeholder = field.placeholder;
+          input.value = field.value || '';
+          additionalFieldsDiv.appendChild(input);
 
-        const languageNameInput = document.createElement('input');
-        languageNameInput.type = 'text';
-        languageNameInput.id = 'language-name';
-        languageNameInput.placeholder = 'Enter Language Name (e.g., English)';
-        languageNameInput.value = features[feature].additionalPrefill.languageName || '';
-
-        additionalFieldsDiv.appendChild(locationCodeInput);
-        additionalFieldsDiv.appendChild(languageNameInput);
-
-        locationCodeInput.addEventListener('input', validateInput);
-        languageNameInput.addEventListener('input', validateInput);
+          input.addEventListener('input', validateInput);
+        });
       }
     } else {
       inputField.placeholder = '';
