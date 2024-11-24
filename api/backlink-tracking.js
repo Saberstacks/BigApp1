@@ -2,37 +2,42 @@ const axios = require('axios');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
+    res.status(405).json({ error: 'Method Not Allowed' });
     return;
   }
 
-  const { site } = req.body;
-  if (!site) {
-    res.status(400).json({ error: 'site is required' });
+  const { target } = req.body;
+
+  if (!target) {
+    res.status(400).json({ error: 'Target (domain) is required' });
     return;
   }
 
-  const task = {
-    target: site,
-    limit: 100
-  };
-
+  // Prepare the request payload
   const payload = {
-    data: [task]
+    target: target,
+    limit: 10,
+    // Add any other parameters you need
   };
 
   try {
-    const response = await axios.post(
-      'https://sandbox.dataforseo.com/v3/backlinks/links/tasks_post',
-      payload,
-      {
-        headers: {
-          'Authorization': `Basic ${Buffer.from(`${process.env.DATAFORSEO_LOGIN}:${process.env.DATAFORSEO_PASSWORD}`).toString('base64')}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-    res.status(200).json(response.data);
+    // Make the API request to the sandbox environment
+    const response = await axios({
+      method: 'post',
+      url: 'https://sandbox.dataforseo.com/v3/backlinks/backlinks/live',
+      auth: {
+        username: process.env.DATAFORSEO_LOGIN,
+        password: process.env.DATAFORSEO_PASSWORD,
+      },
+      data: payload,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const resultData = response.data.tasks[0].result;
+
+    res.status(200).json(resultData);
   } catch (error) {
     const errorData = error.response ? error.response.data : { status_message: error.message };
     console.error('Error in Backlink Tracking:', errorData);
