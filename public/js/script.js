@@ -11,18 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const features = {
     'google-business-profile': {
       placeholder: 'Enter Business Name',
-      example: 'Starbucks',
+      example: 'RustyBrick, Inc.',
       description: 'Google Business Profile Audit requires the business name.',
       validate: (input) => input.trim().length > 0,
       preparePayload: (input) => {
-        const categoryInput = document.getElementById('category');
-        const locationInput = document.getElementById('location');
-        const payload = { businessName: input.trim() };
-        if (categoryInput && categoryInput.value.trim()) payload.category = categoryInput.value.trim();
-        if (locationInput && locationInput.value.trim()) payload.location = locationInput.value.trim();
+        const payload = {
+          keyword: input.trim(),
+          language_code: 'en',
+          location_name: 'New York,New York,United States',
+        };
         return payload;
       },
-      prefill: 'Starbucks'
+      prefill: 'RustyBrick, Inc.'
     },
     'on-page-seo': {
       placeholder: 'Enter Website URL',
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   featureList.addEventListener('click', (e) => {
-    if (e.target && e.target.nodeName == 'LI') {
+    if (e.target && e.target.nodeName === 'LI') {
       selectedFeature = e.target.dataset.feature;
       updateUIForFeature(selectedFeature);
     }
@@ -111,23 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         locationCodeInput.addEventListener('input', validateInput);
         languageNameInput.addEventListener('input', validateInput);
-      } else if (feature === 'google-business-profile') {
-        // Add category and location fields
-        const categoryInput = document.createElement('input');
-        categoryInput.type = 'text';
-        categoryInput.id = 'category';
-        categoryInput.placeholder = 'Enter Business Category (optional)';
-
-        const locationInput = document.createElement('input');
-        locationInput.type = 'text';
-        locationInput.id = 'location';
-        locationInput.placeholder = 'Enter Business Location (optional)';
-
-        additionalFieldsDiv.appendChild(categoryInput);
-        additionalFieldsDiv.appendChild(locationInput);
-
-        categoryInput.addEventListener('input', validateInput);
-        locationInput.addEventListener('input', validateInput);
       }
     } else {
       inputField.placeholder = '';
