@@ -18,7 +18,9 @@ module.exports = async (req, res) => {
   if (category) task.category = category;
   if (location) task.location = location;
 
-  const payload = [task];
+  const payload = {
+    data: [task]
+  };
 
   try {
     const response = await axios.post(
