@@ -12,10 +12,14 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const payload = [{
+  const task = {
     site: site,
     limit: 100
-  }];
+  };
+
+  const payload = {
+    data: [task]
+  };
 
   try {
     const response = await axios.post(
