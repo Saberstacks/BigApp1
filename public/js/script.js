@@ -9,14 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedFeature = null;
 
   const features = {
-    'on-page-seo': {
-      placeholder: 'Enter Website URL',
-      example: 'https://www.example.com',
-      description: 'On-Page SEO Analysis requires the website URL.',
-      validate: (input) => isValidURL(input),
-      preparePayload: (input) => ({ site: input.trim() }),
-      prefill: 'https://www.example.com',
-    },
     'google-business-profile': {
       placeholder: 'Enter Hotel Name',
       example: 'Hilton Garden Inn',
@@ -38,6 +30,52 @@ document.addEventListener('DOMContentLoaded', () => {
           id: 'location',
           placeholder: 'Enter Hotel Location',
           value: 'New York, NY',
+        },
+      ],
+    },
+    'on-page-seo': {
+      placeholder: 'Enter Website URL',
+      example: 'https://www.example.com',
+      description: 'On-Page SEO Analysis requires the website URL.',
+      validate: (input) => isValidURL(input),
+      preparePayload: (input) => ({ site: input.trim() }),
+      prefill: 'https://www.example.com',
+    },
+    'competitor-analysis': {
+      placeholder: 'Enter Keyword',
+      example: 'best smartphones 2023',
+      description: 'Competitor Analysis requires a keyword, location, and language.',
+      validate: (input) => {
+        const locationInput = document.getElementById('location');
+        const languageInput = document.getElementById('language');
+        return (
+          input.trim().length > 0 &&
+          locationInput &&
+          locationInput.value.trim().length > 0 &&
+          languageInput &&
+          languageInput.value.trim().length > 0
+        );
+      },
+      preparePayload: (input) => {
+        const locationInput = document.getElementById('location');
+        const languageInput = document.getElementById('language');
+        return {
+          keyword: input.trim(),
+          location_name: locationInput.value.trim(),
+          language_name: languageInput.value.trim(),
+        };
+      },
+      prefill: 'best smartphones 2023',
+      additionalFields: [
+        {
+          id: 'location',
+          placeholder: 'Enter Location (e.g., New York, United States)',
+          value: 'New York, United States',
+        },
+        {
+          id: 'language',
+          placeholder: 'Enter Language (e.g., English)',
+          value: 'English',
         },
       ],
     },
