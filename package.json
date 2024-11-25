@@ -1,7 +1,7 @@
 {
-  "name": "seo-tools",
+  "name": "backlink-tracking",
   "version": "1.0.0",
-  "description": "SEO tools powered by DataForSEO API",
+  "description": "Backlink Tracking Feature using DataForSEO API",
   "scripts": {
     "build": "echo 'No build step required'",
     "start": "vercel dev"
