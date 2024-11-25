@@ -13,12 +13,14 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // Prepare the request payload
-  const payload = {
-    target: target,
-    limit: 10,
-    // Add any other parameters you need
-  };
+  // Prepare the request payload as an array
+  const payload = [
+    {
+      target: target,
+      limit: 10,
+      // Include other parameters if needed
+    },
+  ];
 
   try {
     // Make the API request to the sandbox environment
@@ -35,7 +37,8 @@ module.exports = async (req, res) => {
       },
     });
 
-    const resultData = response.data;
+    // Access the result from the response
+    const resultData = response.data.tasks[0].result[0];
 
     res.status(200).json(resultData);
   } catch (error) {
